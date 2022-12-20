@@ -7,23 +7,8 @@ String_ID::String_ID() {
 }
 
 
-String_ID::String_ID(const String_ID& c_string) {
-    if (is_string_id(c_string.pstring)) {
-        this->length = c_string.length;
-        this->pstring = new char[this->length + 1];
-        strcpy(this->pstring, c_string.pstring);
-        this->pstring[this->length] = '\0';
-    }
-    else {
-        delete[] this->pstring;
-        pstring = NULL;
-        length = 0;
-    }
-}
-
-
 String_ID::String_ID(char* c_string) {
-    if (!(is_string_id)) {
+    if (!is_string_id(c_string)) {
         delete[] pstring;
         length = 0;
         pstring = NULL;
@@ -50,21 +35,6 @@ String_ID::String_ID(char symbol) {
 }
 
 
-String_ID::String_ID(const String_ID& string) {
-    if (!(is_string_id)) {
-        delete[] pstring;
-        length = 0;
-        pstring = NULL;
-    }
-    else {
-        length = string.length;
-        pstring = new char[length + 1];
-        strcpy(this->pstring, string.pstring);
-        pstring[length] = '\0';
-    }
-}
-
-
 void String_ID::upper() {
     for (size_t index = 0; index < length; index++) {
         pstring[index] = toupper(pstring[index]);
@@ -85,6 +55,19 @@ int String_ID::find(char symbol) {
             return index;
         }
     return NULL;
+}
+
+
+const String_ID& String_ID::operator=(const String_ID& string) {
+    String_ID new_string(*this);
+    new_string.length = string.length;
+    new_string.pstring = new char[string.length + 1];
+    for (int i = 0; i < string.length; i++)
+    {
+        new_string.pstring[i] = string.pstring[i];
+    }
+    new_string.pstring[string.length] = '\0';
+    return new_string;
 }
 
 

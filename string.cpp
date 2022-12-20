@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include <iostream>
+#include <conio.h>
+#include <iomanip>
 #include "string.h"
 
 
@@ -51,3 +53,21 @@ String::~String() {
 	length = 0;
 	pstring = NULL;
 }
+
+
+std::istream& operator>>(std::istream& in, String& s) {
+	char str[255];
+	in >> std::setw(255) >> str;
+	s = str;
+	return in;
+}
+
+
+std::ostream& operator<<(std::ostream& out, const String& s) {
+	for (int i = 0; i < s.length; ++i) {
+		out << s.pstring[i];
+	}
+	out << "\n";
+	return out;
+}
+
