@@ -2,13 +2,7 @@
 #include <iostream>
 #include <conio.h>
 #include <string.h>
-#include <Windows.h>
-#include <sstream>
-#include <typeinfo>	
-#include <cstring>
-#include <iomanip>
 #include <string>
-#include <cctype>
 #include <ctype.h>
 #include "string-id.h"
 
