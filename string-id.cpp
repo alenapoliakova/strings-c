@@ -1,4 +1,16 @@
-﻿#include "string-id.h"
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <conio.h>
+#include <string.h>
+#include <Windows.h>
+#include <sstream>
+#include <typeinfo>	
+#include <cstring>
+#include <iomanip>
+#include <string>
+#include <cctype>
+#include <ctype.h>
+#include "string-id.h"
 
 
 String_ID::String_ID() {
@@ -8,15 +20,16 @@ String_ID::String_ID() {
 
 
 String_ID::String_ID(char* c_string) {
-    if (!is_string_id(c_string)) {
-        delete[] pstring;
-        length = 0;
-        pstring = NULL;
-    }
-    else {
+    std::cout << "\nc_string=" << c_string << "\n";
+    if (check_string_id(c_string)) {
         pstring = c_string;
         length = strlen(c_string);
         pstring[length] = '\0';
+    }
+    else {
+        delete[] c_string;
+        pstring = NULL;
+        length = 0;
     }
 }
 
@@ -31,6 +44,21 @@ String_ID::String_ID(char symbol) {
     else {
         length = 0;
         pstring = 0;
+    }
+}
+
+
+String_ID::String_ID(String& string) {
+    if (is_string_id(string.get_string())) {
+        length = string.get_length();
+        pstring = new char[length + 1];
+        strcpy(pstring, string.get_string());
+        pstring[length] = '\0';
+    }
+    else {
+        delete[] pstring;
+        pstring = NULL;
+        length = 0;
     }
 }
 
@@ -58,55 +86,39 @@ int String_ID::find(char symbol) {
 }
 
 
-const String_ID& String_ID::operator=(const String_ID& string) {
-    String_ID new_string(*this);
-    new_string.length = string.length;
-    new_string.pstring = new char[string.length + 1];
-    for (int i = 0; i < string.length; i++)
-    {
-        new_string.pstring[i] = string.pstring[i];
-    }
-    new_string.pstring[string.length] = '\0';
-    return new_string;
+String_ID String_ID::operator=(const String_ID& string) {
+    String::operator=(string);
+    return string;
 }
 
 
-String_ID& String_ID::operator+(String_ID& string) {
+String_ID String_ID::operator+(const String_ID& string) {
     String_ID new_string(*this);
-    if (new_string && string) {
-        char* c_string = new char[strlen(new_string) + strlen(new_string.pstring) + 1]();
-        strcat(c_string, new_string);
-        strcat(c_string, new_string.pstring);
-        String_ID result_string = String_ID(c_string);
-        result_string.pstring[strlen(new_string) + strlen(string.pstring)] = '\0';
-        return result_string;
+
+    char* new_pstring = new char[length + string.length + 1];
+
+    for (int i = 0; i < length; i++) {
+        new_pstring[i] = pstring[i];
     }
-    return *this;
+
+    for (int i = length; i < length + string.length; i++) {
+        new_pstring[i] = string.pstring[i - length];
+    }
+    new_pstring[length + string.length] = '\0';
+    return String_ID(new_pstring);
 }
 
 
 String_ID String_ID::operator-(String_ID& string) {
-    String_ID new_str(*this);
-    String_ID str(string);
-
-    if (new_str.pstring && str) {
-        for (int index1 = 0; index1 < length; index1++) {
-            
-            // If symbol 1 == symbol 2 => delete it
-            for (int index2 = 0; index2 < strlen(string.pstring); index2++) {
-                if (new_str.pstring[index1] == string.pstring[index2]) {
-                    for (int cnt = index1; cnt < length - 1; cnt++) {
-                        new_str.pstring[cnt] = new_str.pstring[cnt + 1];
-                    }
-                    new_str.pstring[length - 1] = '\0';
-                    index1--;
-                    break;
-                }
-            }
+    for (int i = 0; i < length; i++) {
+        for (int j = 0; j < string.length; j++) {
+            if (pstring[i] == string.pstring[j])
+                pstring[i] = '_';
         }
-        return String_ID(new_str.pstring);
     }
-    return '\0';
+    String_ID new_string(pstring);
+
+    return new_string;
 }
 
 
@@ -180,17 +192,11 @@ bool String_ID ::operator<(String_ID& string) {
 }
 
 
-
-String_ID::operator char* () {
-    return pstring;
-}
-
-
-bool String_ID::is_string_id(const char* c_string) {
-    if (c_string) {
-        if (isalpha(c_string[0])) {
-            for (int index = 1; index < strlen(c_string); index++) {
-                if (!(isdigit(c_string[index]) || isalpha(c_string[index]) || c_string[index] == '_')) {
+bool String_ID::check_string_id(char* string) {
+    if (string) {
+        if (isalpha(string[0])) {
+            for (int i = 1; i < strlen(string); i++) {
+                if (!((isdigit(string[i]) || (isalpha(string[i])) || (string[i] == '_')))) {
                     return false;
                 }
             }
@@ -199,5 +205,26 @@ bool String_ID::is_string_id(const char* c_string) {
             return false;
         }
     }
-    return false;
+    else {
+        return false;
+    }
+}
+
+
+String_ID::operator char* () {
+    return pstring;
+}
+
+
+bool String_ID::is_string_id(const char* c_string) {
+    if (c_string) {
+        for (int i = 0; i < strlen(c_string); i++) {
+            if (!((c_string[i] >= 'a' && c_string[i] <= 'z') || (c_string[i] >= 'A' && c_string[i] <= 'Z') || (c_string[i] >= '0' && c_string[i] <= '9') || c_string[i] == '_')) {
+                return false;
+            }
+        }
+    }
+    else {
+        return false;
+    }
 }

@@ -14,7 +14,9 @@ String::String() {
 String::String(const char* c_string) {
 	length = strlen(c_string);
 	pstring = new char[length + 1];
-	strcpy(this->pstring, c_string);
+	for (int i = 0; i <= length; i++) {
+		pstring[i] = c_string[i];
+	}
 }
 
 
@@ -41,6 +43,11 @@ int String::get_length() {
 }
 
 
+char* String::get_string() {
+	return pstring;
+}
+
+
 void String::clear() {
 	if (pstring) {
 		delete[] pstring;
@@ -48,10 +55,24 @@ void String::clear() {
 	}
 }
 
+
 String::~String() {
-	delete[] pstring;
-	length = 0;
-	pstring = NULL;
+	if (pstring) {
+		delete[] pstring;
+		length = 0;
+		pstring = NULL;
+	}
+}
+
+
+String String::operator=(const String& string) {
+	length = string.length;
+	pstring = new char[length + 1];
+	for (int i = 0; i < length; i++) {
+		pstring[i] = string.pstring[i];
+	}
+	pstring[length] = '\0';
+	return *this;
 }
 
 
@@ -70,4 +91,3 @@ std::ostream& operator<<(std::ostream& out, const String& s) {
 	out << "\n";
 	return out;
 }
-

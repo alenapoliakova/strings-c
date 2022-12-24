@@ -1,128 +1,210 @@
+#define NOMINMAX
+#include <iostream>
+#include <vector>
 #include "string.h"
 #include "string-id.h"
 
 using namespace std;
 
+void print_strings(std::vector<String>& strings);
+int get_id_from_console(std::vector<String>& strings);
+
 
 int main() {
-    setlocale(LC_ALL, "Russian");
+    std::vector <String> strings;
 
-    String_ID str1, str2, str3;
-    char s = 0;
-    int act = 0;
-    cout << endl << "Если на вход поступает строка, не являющася с-идентификатором," << endl
-        << "то действия со строками не выполняются или выводится пустая строка." << endl;
-    do {
-        cout << endl << "Меню: " << endl;
-        cout << "Конкатенация строк - 1" << endl;
-        cout << "Вычитание строк - 2" << endl;
-        cout << "Сравнение строк - 3" << endl;
-        cout << "Узнать длину строки - 4" << endl;
-        cout << "Очистка строки - 5" << endl;
-        cout << "Перевод символов в верхний регистр - 6" << endl;
-        cout << "Перевод символов в нижний регистр - 7" << endl;
-        cout << "Поиск первого вхождения символа в строку - 8" << endl;
-        cout << "Выход из меню - 9" << endl;
-        cout << "Выберите пункт меню: ";
-        cin >> act;
-        if ((act > 9) || (act < 1)) {
-            cout << endl << "Такого пункта меню не существует. Выберите еще раз: ";
-            cin >> act;
-        }
-        switch (act) {
-        case 1: {
-            cout << endl << "Конкатенация строк:" << endl << endl;
-            cout << "Введите строку №1: ";
-            cin >> str1;
-            cout << "Введите строку №2: ";
-            cin >> str2;
-            //str3 = str2;
-            str1 = str1 + str2;
-            cout << "Конкатенация строк выполнена: " << str1 << endl;
-            str1.clear();
-            str2.clear();
-            break;
-        }
-        case 2: {
-            cout << endl << "Вычитание строк:" << endl << endl;
-            cout << "Введите строку №1: ";
-            cin >> str1;
-            cout << "Введите строку №2: ";
-            cin >> str2;
-            cout << "Вычитание строк выполнено: " << str1 - str2 << endl;
-            break;
-            str1.clear();
-            str2.clear();
-        }
-        case 3: {
-            cout << endl << "Сравнение строк:" << endl;
-            cout << "Введите строку №1: ";
-            cin >> str1;
-            cout << "Введите строку №2: ";
-            cin >> str2;
-            if (((str1 < str2) || (str2 < str1) || (str1 > str2) || (str2 > str1) || (str1 == str2) || (str2 == str1)) == NULL)
+    const int CREATE_EMPTY_STRING = 1;
+    const int CREATE_COPY_OF_STRING_BY_ID = 2;
+    const int CREATE_STRING_FROM_INPUT_STRING = 3;
+    const int CREATE_STRING_FROM_INPUT_SYMBOL = 4;
+
+    const int EQUATE_STRINGS = 5;
+    const int ADD = 6;
+    const int SUBSTRACT = 7;
+    const int MORE = 8;
+    const int LESS = 9;
+    const int STRING_TO_LOWERCASE = 10;
+    const int STRING_TO_UPPERCASE = 11;
+    const int FIND_INDEX_OF_ENTRY = 12;
+    const int DELETE_STRING = 13;
+
+    const int GET_ALL_STRINGS = 14;
+    const int EXIT = 15;
+
+    while (true) {
+        print_strings(strings);
+        std::cout << "\n-----\n" << "Menu:\n" << "-----\n";
+        std::cout << "1. Create an empty string.\n2. Create copy of string by ID.\n3. Create string from input string.\n4. Create string from input symbol.\n";
+        std::cout << "5. (=) Equate strings by ID\n6. (+) Add string n1 + string n2.\n7. (-) Subtract string n1 from string n2.\n";
+        std::cout << "8. (>) String n1 > than string n2.\n9. (<) String n1 < than string n2.\n10. Convert string to lowercase.\n11. Convert string to uppercase.\n";
+        std::cout << "12. Find first entry of element X to string.\n13. Delete element by ID.\n";
+        std::cout << "14. Get all strings.\n15. Exit.\n\n";
+        std::cout << "\tSelect your choice: ";
+
+        int choice;
+        if (std::cin >> choice) {
+            switch (choice) {
+            case CREATE_EMPTY_STRING: {
+                strings.push_back(String_ID());
                 break;
-            else if (str1 < str2)
-                cout << "Строка №1 меньше строки №2" << endl;
-            else if (str1 == str2)
-                cout << "Строки равны" << endl;
-            else if (str1 > str2)
-                cout << "Строка №1 больше строки №2" << endl;
-            str1.clear();
-            str2.clear();
-            break;
-        }
-        case 4: {
-            cout << endl << "Узнать длину строки:" << endl << endl;
-            cout << "Введите строку: ";
-            cin >> str1;
-            cout << endl;
-            cout << "Длина строки = " << str1.get_length() << endl;
-            str1.clear();
-            break;
-        }
-        case 5: {
-            cout << endl << "Очистка строки:" << endl << endl;
-            cout << "Введите строку: ";
-            cin >> str1;
-            cout << "Выполнение очистки строки." << endl;
-            str1.clear();
-            cout << "Строка после очистки: " << str1 << endl;
-            break;
-        }
-        case 6: {
-            cout << endl << "Перевод символов в верхний регистр:" << endl << endl;
-            cout << "Введите строку: ";
-            cin >> str1;
-            str1.upper();
-            cout << "Измененная строка: " << str1 << endl;
-            str1.clear();
-            break;
-        }
-        case 7: {
-            cout << endl << "Перевод символов в нижний регистр:" << endl << endl;
-            cout << "Введите строку: ";
-            cin >> str2;
-            str2.lower();
-            cout << "Измененная строка: " << str2 << endl;
-            str2.clear();
-            break;
-        }
-        case 8: {
-            cout << endl << "Поиск первого вхождения символа в строку:" << endl << endl;
-            cout << "Введите строку: ";
-            cin >> str1;
-            cout << "Введите символ: ";
-            cin >> s;
-            int position = str1.find(s);
-            if (position > 0)
-                cout << "Символ входит в строку первый раз в позиции " << position << endl;
-            else
-                cout << "Строка не является строкой-идентификатором или такого символа в строке нет!" << endl;
-            break;
-            str1.clear();
-        }
+            }
+            case CREATE_COPY_OF_STRING_BY_ID: {
+                std::cout << "\nWrite a ID of string for copy: ";
+                int id = get_id_from_console(strings);
+                strings.push_back((String_ID)strings[id - 1]);
+                break;
+            }
+            case CREATE_STRING_FROM_INPUT_STRING: {
+                std::cout << "\nWrite string: ";
+                std::cin.ignore();
+                std::string line;
+                std::getline(std::cin, line);
 
+                char* string = new char[line.size() + 1];
+                for (int i = 0; i < line.size() + 1; i++) {
+                    string[i] = line[i];
+                }
+                strings.push_back(String_ID(string));
+                break;
+            }
+            case CREATE_STRING_FROM_INPUT_SYMBOL: {
+                std::cout << "\nWrite one symbol: ";
+                char symbol;
+                std::cin >> symbol;
+                strings.push_back(String_ID(symbol));
+                break;
+            }
+            case EQUATE_STRINGS: {
+                int string_id = get_id_from_console(strings);
+                String_ID copy_string = strings[string_id - 1];
+                std::cout << "\nCreate new string: " << copy_string.get_string();
+                strings.push_back(copy_string);
+                break;
+            }
+            case ADD: {
+                std::cout << "\nAdd string1 to string2";
+                int first_id = get_id_from_console(strings);
+                int second_id = get_id_from_console(strings);
+                String_ID a = String_ID(strings[first_id - 1]);
+                String_ID b = String_ID(strings[second_id - 1]);
+                strings.push_back(a + b);
+                break;
+            }
+            case SUBSTRACT: {
+                std::cout << "\nSubstract strings";
+                int first_id = get_id_from_console(strings);
+                int second_id = get_id_from_console(strings);
+                String_ID a = String_ID(strings[first_id - 1]);
+                String_ID b = String_ID(strings[second_id - 1]);
+                strings.push_back(a - b);
+                break;
+            }
+            case MORE: {
+                int first_id = get_id_from_console(strings);
+                int second_id = get_id_from_console(strings);
+
+                String_ID a = String_ID(strings[first_id - 1]);
+                String_ID b = String_ID(strings[second_id - 1]);
+
+                bool result = a > b;
+                if (result) {
+                    std::cout << "\nYes, " << a.get_string() << " bigger than " << b.get_string();
+                }
+                else {
+                    std::cout << "\nNo, " << a.get_string() << " not bigger than " << b.get_string();
+                }
+                break;
+            }
+            case LESS: {
+                int first_id = get_id_from_console(strings);
+                int second_id = get_id_from_console(strings);
+
+                String_ID a = String_ID(strings[first_id - 1]);
+                String_ID b = String_ID(strings[second_id - 1]);
+
+                bool result = a < b;
+                if (result) {
+                    std::cout << "\nYes, " << a.get_string() << " less than " << b.get_string();
+                }
+                else {
+                    std::cout << "\nNo, " << a.get_string() << " not less than " << b.get_string();
+                }
+                break;
+            }
+            case STRING_TO_LOWERCASE: {
+                int string_id = get_id_from_console(strings);
+                String_ID string = String_ID(strings[string_id - 1]);
+                string.lower();
+                strings[string_id - 1] = string;
+                break;
+            }
+            case STRING_TO_UPPERCASE: {
+                int string_id = get_id_from_console(strings);
+                String_ID string = String_ID(strings[string_id - 1]);
+                string.upper();
+                strings[string_id - 1] = string;
+                break;
+            }
+            case FIND_INDEX_OF_ENTRY: {
+                int string_id = get_id_from_console(strings);
+                String_ID string = String_ID(strings[string_id - 1]);
+
+                std::cout << "\nWrite string to find it in " << string.get_string() << " :";
+                char str;
+                std::cin >> str;
+
+                std::cout << "\nIndex=" << string.find(str);
+                break;
+            }
+            case DELETE_STRING: {
+                int string_id = get_id_from_console(strings);
+                strings.erase(strings.cbegin() + string_id - 1);
+                break;
+            }
+            case GET_ALL_STRINGS: {
+                print_strings(strings);
+                break;
+            }
+            case EXIT:
+                return 0;
+            default:
+                std::cout << "\nPlease enter a choice from Menu\n";
+                break;
+            }
         }
-    } while (act != 9);
+        else {
+            std::cout << "\nPlease enter a valid number\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+    }
+}
+
+void print_strings(std::vector<String>& strings) {
+    std::cout << "\nStrings:\n";
+    for (int i = 0; i < strings.size(); i++) {
+        std::cout << "\nN(" << i + 1 << ")=" << strings[i].get_string();
+    }
+    std::cout << "\n";
+}
+
+
+int get_id_from_console(std::vector<String>& strings) {
+    while (true) {
+        std::cout << "\nID=";
+        int id;
+        if (std::cin >> id) {
+            if (id >= 1 && id <= strings.size()) {
+                return id;
+            }
+            else {
+                std::cout << "\nPlease enter ID from list of all strings\n";
+            }
+        }
+        else {
+            std::cout << "\nPlease enter a valid ID\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+    }
 }

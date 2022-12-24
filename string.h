@@ -1,6 +1,4 @@
 ﻿#pragma once
-// #include <conio.h>
-// #include <string.h>
 #include <iostream>
 #include <cstring>
 #include <cctype>
@@ -17,8 +15,10 @@ public:
     String(const String& string);  // Конструктор копирования
 
     int get_length();  // Получение длины строки
+    char* get_string();  // Получение строки
     void clear();  // Очистка строки
     ~String();  // Деструктор
+    String operator=(const String& string);
 
     friend std::istream& operator>>(std::istream& in, String& s);
     friend std::ostream& operator<<(std::ostream& out, const String& s);
