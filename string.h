@@ -9,17 +9,14 @@ protected:
     char* pstring;
     int length;
 public:
-    String();  // Конструктор без параметров
-    String(const char* c_string);  // Конструктор, принимающий в качестве параметра C-строку
-    String(char symbol);  // Конструктор, принимающий в качестве параметра символ
-    String(const String& string);  // Конструктор копирования
+    String();
+    String(const char* c_string);
+    String(char symbol);
+    String(const String& string);
 
-    int get_length();  // Получение длины строки
-    char* get_string();  // Получение строки
-    void clear();  // Очистка строки
-    ~String();  // Деструктор
+    int get_length();
+    char* get_string();
+    void clear();
+    ~String();
     String operator=(const String& string);
-
-    friend std::istream& operator>>(std::istream& in, String& s);
-    friend std::ostream& operator<<(std::ostream& out, const String& s);
 };

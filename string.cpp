@@ -44,7 +44,9 @@ int String::get_length() {
 
 
 char* String::get_string() {
-	return pstring;
+	char* copy_pstring = new char[length + 1];
+	strcpy(copy_pstring, pstring);
+	return copy_pstring;
 }
 
 
@@ -67,27 +69,11 @@ String::~String() {
 
 String String::operator=(const String& string) {
 	length = string.length;
+	delete[] pstring;
 	pstring = new char[length + 1];
 	for (int i = 0; i < length; i++) {
 		pstring[i] = string.pstring[i];
 	}
 	pstring[length] = '\0';
 	return *this;
-}
-
-
-std::istream& operator>>(std::istream& in, String& s) {
-	char str[255];
-	in >> std::setw(255) >> str;
-	s = str;
-	return in;
-}
-
-
-std::ostream& operator<<(std::ostream& out, const String& s) {
-	for (int i = 0; i < s.length; ++i) {
-		out << s.pstring[i];
-	}
-	out << "\n";
-	return out;
 }

@@ -4,10 +4,9 @@
 #include "string.h"
 #include "string-id.h"
 
-using namespace std;
-
 void print_strings(std::vector<String>& strings);
 int get_id_from_console(std::vector<String>& strings);
+String_ID get_string(std::vector<String>& strings);
 
 
 int main() {
@@ -42,6 +41,7 @@ int main() {
         std::cout << "\tSelect your choice: ";
 
         int choice;
+
         if (std::cin >> choice) {
             switch (choice) {
             case CREATE_EMPTY_STRING: {
@@ -50,8 +50,8 @@ int main() {
             }
             case CREATE_COPY_OF_STRING_BY_ID: {
                 std::cout << "\nWrite a ID of string for copy: ";
-                int id = get_id_from_console(strings);
-                strings.push_back((String_ID)strings[id - 1]);
+                String_ID string = get_string(strings);
+                strings.push_back(string);
                 break;
             }
             case CREATE_STRING_FROM_INPUT_STRING: {
@@ -75,62 +75,51 @@ int main() {
                 break;
             }
             case EQUATE_STRINGS: {
-                int string_id = get_id_from_console(strings);
-                String_ID copy_string = strings[string_id - 1];
+                String_ID copy_string = get_string(strings);
                 std::cout << "\nCreate new string: " << copy_string.get_string();
                 strings.push_back(copy_string);
                 break;
             }
             case ADD: {
                 std::cout << "\nAdd string1 to string2";
-                int first_id = get_id_from_console(strings);
-                int second_id = get_id_from_console(strings);
-                String_ID a = String_ID(strings[first_id - 1]);
-                String_ID b = String_ID(strings[second_id - 1]);
-                strings.push_back(a + b);
+                String_ID first_string = get_string(strings);
+                String_ID second_string = get_string(strings);
+                strings.push_back(first_string + second_string);
                 break;
             }
             case SUBSTRACT: {
                 std::cout << "\nSubstract strings";
-                int first_id = get_id_from_console(strings);
-                int second_id = get_id_from_console(strings);
-                String_ID a = String_ID(strings[first_id - 1]);
-                String_ID b = String_ID(strings[second_id - 1]);
-
-                String_ID c = a - b;
-                strings.push_back(c);
+                String_ID first_string = get_string(strings);
+                String_ID second_string = get_string(strings);
+                strings.push_back(first_string - second_string);
                 break;
             }
             case MORE: {
-                int first_id = get_id_from_console(strings);
-                int second_id = get_id_from_console(strings);
+                String_ID first_string = get_string(strings);
+                String_ID second_string = get_string(strings);
 
-                String_ID a = String_ID(strings[first_id - 1]);
-                String_ID b = String_ID(strings[second_id - 1]);
-
-                bool result = a > b;
-                if (result) {
-                    std::cout << "\nYes, " << a.get_string() << " bigger than " << b.get_string();
+                int result = first_string > second_string;
+                if (result == 1) {
+                    std::cout << "\nYes, " << first_string.get_string() << " bigger than " << second_string.get_string();
                 }
-                else {
-                    std::cout << "\nNo, " << a.get_string() << " not bigger than " << b.get_string();
+                else if (result == 0) {
+                    std::cout << "\nNo, " << first_string.get_string() << " not bigger than " << second_string.get_string();
                 }
+                else std::cout << "\nStrings is equals: " << first_string.get_string() << "==" << second_string.get_string();
                 break;
             }
             case LESS: {
-                int first_id = get_id_from_console(strings);
-                int second_id = get_id_from_console(strings);
+                String_ID first_string = get_string(strings);
+                String_ID second_string = get_string(strings);
 
-                String_ID a = String_ID(strings[first_id - 1]);
-                String_ID b = String_ID(strings[second_id - 1]);
-
-                bool result = a < b;
-                if (result) {
-                    std::cout << "\nYes, " << a.get_string() << " less than " << b.get_string();
+                int result = first_string < second_string;
+                if (result == 1) {
+                    std::cout << "\nYes, " << first_string.get_string() << " less than " << second_string.get_string();
                 }
-                else {
-                    std::cout << "\nNo, " << a.get_string() << " not less than " << b.get_string();
+                else if (result == 0) {
+                    std::cout << "\nNo, " << first_string.get_string() << " not less than " << second_string.get_string();
                 }
+                else std::cout << "\nStrings is equals: " << first_string.get_string() << "==" << second_string.get_string();
                 break;
             }
             case STRING_TO_LOWERCASE: {
@@ -148,8 +137,7 @@ int main() {
                 break;
             }
             case FIND_INDEX_OF_ENTRY: {
-                int string_id = get_id_from_console(strings);
-                String_ID string = String_ID(strings[string_id - 1]);
+                String_ID string = get_string(strings);
 
                 std::cout << "\nWrite string to find it in " << string.get_string() << " :";
                 char str;
@@ -209,4 +197,10 @@ int get_id_from_console(std::vector<String>& strings) {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
     }
+}
+
+
+String_ID get_string(std::vector<String>& strings) {
+    int string_id = get_id_from_console(strings);
+    return (String_ID)strings[string_id - 1];
 }
