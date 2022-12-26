@@ -87,8 +87,6 @@ String_ID String_ID::operator=(const String_ID& string) {
 
 
 String_ID String_ID::operator+(const String_ID& string) {
-    String_ID new_string(*this);
-
     char* new_pstring = new char[length + string.length + 1];
 
     for (int i = 0; i < length; i++) {
@@ -104,15 +102,25 @@ String_ID String_ID::operator+(const String_ID& string) {
 
 
 String_ID String_ID::operator-(String_ID& string) {
+    char* new_pstring = new char[length + 1];
+
     for (int i = 0; i < length; i++) {
+        bool same = false;
         for (int j = 0; j < string.length; j++) {
-            if (pstring[i] == string.pstring[j])
-                pstring[i] = '_';
+            if (pstring[i] == string.pstring[j]) {
+                same = true;
+                break;
+            }
+        }
+        if (same) {
+            new_pstring[i] = '_';
+        }
+        else {
+            new_pstring[i] = pstring[i];
         }
     }
-    String_ID new_string(pstring);
-
-    return new_string;
+    new_pstring[length] = '\0';
+    return String_ID(new_pstring);
 }
 
 
@@ -198,6 +206,7 @@ bool String_ID::check_string_id(char* string) {
         else {
             return false;
         }
+        return true;
     }
     else {
         return false;
@@ -217,6 +226,7 @@ bool String_ID::is_string_id(const char* c_string) {
                 return false;
             }
         }
+        return true;
     }
     else {
         return false;

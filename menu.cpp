@@ -96,7 +96,9 @@ int main() {
                 int second_id = get_id_from_console(strings);
                 String_ID a = String_ID(strings[first_id - 1]);
                 String_ID b = String_ID(strings[second_id - 1]);
-                strings.push_back(a - b);
+
+                String_ID c = a - b;
+                strings.push_back(c);
                 break;
             }
             case MORE: {
