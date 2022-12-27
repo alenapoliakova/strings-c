@@ -15,7 +15,6 @@ String_ID::String_ID() {
 
 
 String_ID::String_ID(char* c_string) {
-    std::cout << "\nc_string=" << c_string << "\n";
     if (check_string_id(c_string)) {
         pstring = new char[strlen(c_string) + 1];
         strcpy(pstring, c_string);
